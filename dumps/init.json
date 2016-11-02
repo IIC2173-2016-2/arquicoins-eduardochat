@@ -24,7 +24,8 @@
     },
     "header": {
         "content-type": "application/json",
-        "date": "Wed, 02 Nov 2016 22:44:01 GMT",
+        "date": "Wed, 02 Nov 2016 23:32:08 GMT",
+        "location": "/transactions/47e13642-0496-47ef-bc43-72f2d77cfd53/",
         "server": "WSGIServer/0.2 CPython/3.5.2",
         "x-frame-options": "SAMEORIGIN",
         "content-length": "100",

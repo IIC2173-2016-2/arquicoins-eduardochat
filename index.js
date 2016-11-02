@@ -42,11 +42,15 @@ router.route('/')
   })
   .post(function(req, res) {
     function callback(err, result) {
-
-      // TODO --> Store transaction details !!
-
       if (err) { res.json(err); }
-      else { res.json(result);  }
+      else {
+        var status = result.status;
+        var trx_id = result.header.location.replace('/transactions/', '').replace('/', '');
+
+        // TODO --> Store transaction details !!
+
+        res.json(result);
+      }
     }
     ArquitranCtrl.init(req.body.card_number, req.body.card_cvv, req.body.first_name, req.body.last_name, req.body.currency, req.body.amount, callback)
   })
@@ -59,11 +63,12 @@ var currentId = 'c8c1e4c2-fc9f-4898-8117-99af9062fd61';
 router.route('/test/init')
   .get(function(req, res) {
     function callback(err, result) {
-
-      // TODO --> Update currentId after it's implemented in the result
-
-      if (err) { res.json(err); }
-      else { res.json(result);  }
+      if (err) {
+          res.json(err);
+      } else {
+          currentId = result.header.location.replace('/transactions/', '').replace('/', '');
+          res.json(result);
+      }
     }
     ArquitranCtrl.init('9a4576d3-83a7-4d58-a4d2-f32f201f6e34', 123, 'Pedro', 'Saratscheff', 'CLP', 1, callback)
   })
