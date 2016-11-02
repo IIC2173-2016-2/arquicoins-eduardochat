@@ -34,7 +34,21 @@ var router = express.Router();              // get an instance of the express Ro
 
 router.route('/')
   .get(function(req, res) {
-    res.json({ 'success': true })
+    function callback(err, result) {
+      if (err) { res.json(err); }
+      else { res.json(result);  }
+    }
+    ArquitranCtrl.state(req.body.id, callback)
+  })
+  .post(function(req, res) {
+    function callback(err, result) {
+
+      // TODO --> Store transaction details !!
+
+      if (err) { res.json(err); }
+      else { res.json(result);  }
+    }
+    ArquitranCtrl.init(req.body.card_number, req.body.card_cvv, req.body.first_name, req.body.last_name, req.body.currency, req.body.amount, callback)
   })
 ;
 
@@ -45,7 +59,9 @@ var currentId = 'c8c1e4c2-fc9f-4898-8117-99af9062fd61';
 router.route('/test/init')
   .get(function(req, res) {
     function callback(err, result) {
-      // Update currentId after it's implemented in the result
+
+      // TODO --> Update currentId after it's implemented in the result
+
       if (err) { res.json(err); }
       else { res.json(result);  }
     }
