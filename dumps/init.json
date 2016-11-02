@@ -1,0 +1,35 @@
+{
+    "req": {
+        "method": "POST",
+        "url": "https://alquitran.ing.puc.cl/transactions/",
+        "data": {
+            "application_token": "9c00e472-c119-431e-97fa-019a30ebc783",
+            "kredit_card": {
+                "card_number": "9a4576d3-83a7-4d58-a4d2-f32f201f6e34",
+                "card_cvv": 123,
+                "card_holder": {
+                    "first_name": "Pedro",
+                    "last_name": "Saratscheff"
+                }
+            },
+            "to_charge": {
+                "currency": "CLP",
+                "amount": 1
+            }
+        },
+        "headers": {
+            "user-agent": "node-superagent/2.3.0",
+            "content-type": "application/json"
+        }
+    },
+    "header": {
+        "content-type": "application/json",
+        "date": "Wed, 02 Nov 2016 22:44:01 GMT",
+        "server": "WSGIServer/0.2 CPython/3.5.2",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "100",
+        "connection": "close"
+    },
+    "status": 201,
+    "text": "{\"status\": {\"transaction_status_code\": \"EXEC\", \"description\": \"Transaction validated and executed\"}}"
+}

@@ -1,0 +1,21 @@
+{
+    "req": {
+        "method": "GET",
+        "url": "https://alquitran.ing.puc.cl/transactions/c8c1e4c2-fc9f-4898-8117-99af9062fd61/?application_token=9c00e472-c119-431e-97fa-019a30ebc783",
+        "data": null,
+        "headers": {
+            "user-agent": "node-superagent/2.3.0",
+            "accept-encoding": "gzip, deflate"
+        }
+    },
+    "header": {
+        "content-type": "application/json",
+        "date": "Wed, 02 Nov 2016 22:56:41 GMT",
+        "server": "WSGIServer/0.2 CPython/3.5.2",
+        "x-frame-options": "SAMEORIGIN",
+        "content-length": "149",
+        "connection": "close"
+    },
+    "status": 200,
+    "text": "{\"to_charge\": {\"amount\": 3.0, \"currency\": \"CLP\"}, \"status\": {\"transaction_status_code\": \"EXEC\", \"description\": \"Transaction validated and executed\"}}"
+}

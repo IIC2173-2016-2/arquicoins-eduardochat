@@ -1,0 +1,124 @@
+// I FUCKED UP! Borré toda la wea con los scripts, pero alcancé a rescatar esta versión:
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Arquitran test scripts</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container bs-docs-container">
+    <div class="row">
+      <div class="col-md-9" role="main">
+        <h1 class="page-header"> Iniciar transacción </h1>
+        <a href="#" id="init-201" class="btn btn-primary btn-lg disabled">201</a>
+        <a href="#" id="init-400" class="btn btn-primary btn-lg disabled">400</a>
+        <a href="#" id="init-401" class="btn btn-primary btn-lg disabled">401</a>
+        <a href="#" id="init-403" class="btn btn-primary btn-lg disabled">403</a>
+        <a href="#" id="init-501" class="btn btn-primary btn-lg disabled">501</a>
+      </div>
+    </div>
+    <div class="row">
+      <div id="initResult" class="jumbotron">
+        <h1>Resultado</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-9" role="main">
+        <h1 class="page-header"> Obtener resultado de transacción </h1>
+        <a href="#" id="state-201" class="btn btn-primary btn-lg disabled">200</a>
+        <a href="#" id="state-400" class="btn btn-primary btn-lg disabled">400</a>
+        <a href="#" id="state-403" class="btn btn-primary btn-lg disabled">403</a>
+        <a href="#" id="state-501" class="btn btn-primary btn-lg disabled">501</a>
+      </div>
+    </div>
+    <div class="row">
+      <div id="stateResult" class="jumbotron">
+        <h1>Resultado</h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery Version 1.11.1 -->
+  <script src="js/jquery.js"></script>
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- Load Arquitran calls -->
+  <script src="js/arquitran.js"></script>
+</body>
+</html>
+
+$(document).ready(function() {
+    $('#init-201').click(function() {
+        var url = "https://alquitran.ing.puc.cl/transactions/";
+        var data = {
+            "application_token": "9c00e472-c119-431e-97fa-019a30ebc783",
+            "kredit_card": {
+                "card_number": "9a4576d3-83a7-4d58-a4d2-f32f201f6e34",
+                "card_cvv": 123,
+                "card_holder": {
+                    "first_name": "Pedro",
+                    "last_name": "Saratscheff"
+                }
+            },
+            "to_charge": {
+                "currency": "CLP",
+                "amount": 1
+            }
+        }
+        function success(data) { $('#initResult').html('<h1>Success</h1>' + JSON.stringify(data)); }
+        function error(data) {   $('#initResult').html('<h1>ERROR</h1>' + JSON.stringify(data));   }
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            success: success,
+            error: error,
+            dataType: 'application/json'
+        });
+    });
+    $('#init-201').removeClass('disabled');
+    $('#init-400').click(function() {
+        $.post("https://alquitran.ing.puc.cl/transactions/", {
+                "400test": true
+            })
+            .done(function(data) {
+                alert("success " + JSON.stringify(data));
+            })
+            .fail(function(data) {
+                alert("error " + JSON.stringify(data));
+            })
+            .always(function() {
+                // always runs
+            });
+    });
+    $('#init-400').removeClass('disabled');
+    $('#init-401').click(function() {
+        $.post("https://alquitran.ing.puc.cl/transactions/", {
+                "application_token": "EfESn-T5Tsz@yE4^YS7h8b+UAtjtjt",
+                "kredit_card": {
+                    "card_number": "523432-42352-1983",
+                    "card_cvv": 345,
+                    "card_holder": {
+                        "first_name": "Eduardo",
+                        "last_name": "McEduardo"
+                    }
+                },
+                "to_charge": {
+                    "currency": "CLP",
+                    "amount": 5533
+                }
+            })
+            .done(function(data) {
+                alert("success " + JSON.stringify(data));
+            })
+            .fail(function(data) {
+                alert("error " + JSON.stringify(data));
+            })
+            .always(function() {
+                // always runs
+            });
+    });
+    $('#init-401').removeClass('disabled');
+});
