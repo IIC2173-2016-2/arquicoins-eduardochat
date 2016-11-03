@@ -9,7 +9,7 @@ var express    = require('express');      // call express
 var app        = express();               // define our app using express
 var bodyParser = require('body-parser');  // used to retrieve post params
 var morgan     = require('morgan');       // used to log received requests
-var path = __dirname + '/arquicoins/views/';
+var path = __dirname + '/public/';
 
 // To pass original headers through NGINX
 app.set('trust proxy', 'loopback');
@@ -24,24 +24,33 @@ app.use(morgan('dev')); // 'dev' for development / 'short' for production
 
 var port = 8083;        // set our port
 
-// Load Controllers
-var ArquitranCtrl = require('./arquicoins/arquitran/ArquitranCtrl');
-
 // =============================================================================
 // ROUTES FOR OUR API
 // =============================================================================
 var router = express.Router(); // get an instance of the express Router
 
-router.get('/',function(req,res){
-  res.sendFile(path + "index.html");
+// =============================Login User Data=================================
+
+// ==========================Arquicoins Cassandra===============================
+var Arquicoins = require('./arquicoins/arquicoins/arquicoinsCtrl.js');
+
+router.get('/data/arquicoins/:username', function(req, res){
+  function callback(err, result) {
+    if (err) { res.json(err); }
+    else { res.json(result);  }
+  }
+  Arquicoins.getArquicoins(req.params.username, callback)
 });
+
+// ============================Arquitran TRX====================================
+var Arquitran = require('./arquicoins/arquitran/arquitranCtrl');
 
 router.get('/trx/:trxId', function(req, res) {
   function callback(err, result) {
     if (err) { res.json(err); }
     else { res.json(result);  }
   }
-  ArquitranCtrl.state(req.params.trxId, callback)
+  Arquitran.state(req.params.trxId, callback)
 });
 router.post('/trx', function(req, res) {
   function callback(err, result) {
@@ -55,8 +64,11 @@ router.post('/trx', function(req, res) {
       res.json(result);
     }
   }
-  ArquitranCtrl.init(req.body.card_number, req.body.card_cvv, req.body.first_name, req.body.last_name, req.body.currency, req.body.amount, callback)
+  Arquitran.init(req.body.card_number, req.body.card_cvv, req.body.first_name, req.body.last_name, req.body.currency, req.body.amount, callback)
 });
+
+// =========================Public Folder=======================================
+app.use(express.static('public'));
 
 // =============================================================================
 // ROUTES FOR samples
@@ -72,7 +84,7 @@ router.route('/test/init')
           res.json(result);
       }
     }
-    ArquitranCtrl.init('9a4576d3-83a7-4d58-a4d2-f32f201f6e34', 123, 'Pedro', 'Saratscheff', 'CLP', 1, callback)
+    Arquitran.init('9a4576d3-83a7-4d58-a4d2-f32f201f6e34', 123, 'Pedro', 'Saratscheff', 'CLP', 1, callback)
   })
 ;
 router.route('/test/state')
@@ -81,12 +93,13 @@ router.route('/test/state')
       if (err) { res.json(err); }
       else { res.json(result);  }
     }
-    ArquitranCtrl.state(currentId, callback)
+    Arquitran.state(currentId, callback)
   })
 ;
 
-// REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api/v1
+// =============================================================================
+// Register Routes
+// =============================================================================
 app.use('/arquicoins', router);
 // Catch 404
 app.use("*",function(req,res){
