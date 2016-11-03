@@ -9,7 +9,7 @@ var express    = require('express');      // call express
 var app        = express();               // define our app using express
 var bodyParser = require('body-parser');  // used to retrieve post params
 var morgan     = require('morgan');       // used to log received requests
-var path = __dirname + '/views/';
+var path = __dirname + '/app/views/';
 
 // To pass original headers through NGINX
 app.set('trust proxy', 'loopback');
@@ -44,20 +44,19 @@ router.get('/trx/:trxId', function(req, res) {
   ArquitranCtrl.state(req.params.trxId, callback)
 });
 router.post('/trx', function(req, res) {
-    function callback(err, result) {
-      if (err) { res.json(err); }
-      else {
-        var status = result.status;
-        var trx_id = result.header.location.replace('/transactions/', '').replace('/', '');
+  function callback(err, result) {
+    if (err) { res.json(err); }
+    else {
+      var status = result.status;
+      var trx_id = result.header.location.replace('/transactions/', '').replace('/', '');
 
-        // TODO --> Store transaction details !!
+      // TODO --> Store transaction details !!
 
-        res.json(result);
-      }
+      res.json(result);
     }
-    ArquitranCtrl.init(req.body.card_number, req.body.card_cvv, req.body.first_name, req.body.last_name, req.body.currency, req.body.amount, callback)
-  })
-;
+  }
+  ArquitranCtrl.init(req.body.card_number, req.body.card_cvv, req.body.first_name, req.body.last_name, req.body.currency, req.body.amount, callback)
+});
 
 // =============================================================================
 // ROUTES FOR samples
@@ -91,6 +90,7 @@ router.route('/test/state')
 app.use('/arquicoins', router);
 // Catch 404
 app.use("*",function(req,res){
+  res.status(404);
   res.sendFile(path + "404.html");
 });
 
