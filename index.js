@@ -30,17 +30,20 @@ var ArquitranCtrl = require('./app/arquitran/ArquitranCtrl');
 // =============================================================================
 // ROUTES FOR OUR API
 // =============================================================================
-var router = express.Router();              // get an instance of the express Router
+var router = express.Router(); // get an instance of the express Router
 
-router.route('/')
-  .get(function(req, res) {
-    function callback(err, result) {
-      if (err) { res.json(err); }
-      else { res.json(result);  }
-    }
-    ArquitranCtrl.state(req.body.id, callback)
-  })
-  .post(function(req, res) {
+router.get('/',function(req,res){
+  res.sendFile(path + "index.html");
+});
+
+router.get('/trx/:trxId', function(req, res) {
+  function callback(err, result) {
+    if (err) { res.json(err); }
+    else { res.json(result);  }
+  }
+  ArquitranCtrl.state(req.params.trxId, callback)
+});
+router.post('/trx', function(req, res) {
     function callback(err, result) {
       if (err) { res.json(err); }
       else {
@@ -86,6 +89,10 @@ router.route('/test/state')
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api/v1
 app.use('/arquicoins', router);
+// Catch 404
+app.use("*",function(req,res){
+  res.sendFile(path + "404.html");
+});
 
 // =============================================================================
 // START THE SERVER
