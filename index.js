@@ -9,7 +9,7 @@ var express    = require('express');      // call express
 var app        = express();               // define our app using express
 var bodyParser = require('body-parser');  // used to retrieve post params
 var morgan     = require('morgan');       // used to log received requests
-var path = __dirname + '/app/views/';
+var path = __dirname + '/arquicoins/views/';
 
 // To pass original headers through NGINX
 app.set('trust proxy', 'loopback');
@@ -25,7 +25,7 @@ app.use(morgan('dev')); // 'dev' for development / 'short' for production
 var port = 8083;        // set our port
 
 // Load Controllers
-var ArquitranCtrl = require('./app/arquitran/ArquitranCtrl');
+var ArquitranCtrl = require('./arquicoins/arquitran/ArquitranCtrl');
 
 // =============================================================================
 // ROUTES FOR OUR API
