@@ -68,7 +68,7 @@ router.post('/trx', function(req, res) {
 });
 
 // =========================Public Folder=======================================
-app.use(express.static('public'));
+app.use('/arquicoins', express.static('public'));
 
 // =============================================================================
 // ROUTES FOR samples
