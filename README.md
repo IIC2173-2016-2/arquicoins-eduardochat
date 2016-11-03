@@ -10,5 +10,5 @@
 [GET] localhost:8083/arquicoins/trx/trxID
 
 [POST] localhost:8083/arquicoins/trx
-{ card_number, card_cvv, first_name, last_name, currency, amount }
+{ card_number: String, card_cvv: Number, first_name: String, last_name: String, currency: String, amount: Number }
 ```
