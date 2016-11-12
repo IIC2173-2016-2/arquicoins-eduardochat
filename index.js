@@ -38,8 +38,11 @@ var router = express.Router(); // get an instance of the express Router
 // =============================Login User Data=================================
 
 app.use(function (req, res, next) {
+  // Remover la siguient elinea cuando se vata prod
+  req.cookies["access-token"] = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyIkX18iOnsic3RyaWN0TW9kZSI6dHJ1ZSwiZ2V0dGVycyI6e30sIl9pZCI6IjU4MWIzNWQzNWE5MGRlMTEyZDU4MzAwNyIsIndhc1BvcHVsYXRlZCI6ZmFsc2UsImFjdGl2ZVBhdGhzIjp7InBhdGhzIjp7Il9fdiI6ImluaXQiLCJfaWQiOiJpbml0IiwicGFzc3dvcmQiOiJpbml0IiwidXNlcm5hbWUiOiJpbml0IiwiY3ZzIjoibW9kaWZ5IiwiY2FyZG51bWJlciI6Im1vZGlmeSIsImFjY291bnR0eXBlIjoiaW5pdCIsImJsb29kdHlwZSI6ImluaXQiLCJhZGRyZXNzIjoiaW5pdCIsImVtYWlsIjoiaW5pdCIsIm5hbWUiOiJpbml0In0sInN0YXRlcyI6eyJpZ25vcmUiOnt9LCJkZWZhdWx0Ijp7fSwiaW5pdCI6eyJfX3YiOnRydWUsIl9pZCI6dHJ1ZSwicGFzc3dvcmQiOnRydWUsInVzZXJuYW1lIjp0cnVlLCJhY2NvdW50dHlwZSI6dHJ1ZSwiYmxvb2R0eXBlIjp0cnVlLCJhZGRyZXNzIjp0cnVlLCJlbWFpbCI6dHJ1ZSwibmFtZSI6dHJ1ZX0sIm1vZGlmeSI6eyJjYXJkbnVtYmVyIjp0cnVlLCJjdnMiOnRydWV9LCJyZXF1aXJlIjp7fX0sInN0YXRlTmFtZXMiOlsicmVxdWlyZSIsIm1vZGlmeSIsImluaXQiLCJkZWZhdWx0IiwiaWdub3JlIl19LCJlbWl0dGVyIjp7ImRvbWFpbiI6bnVsbCwiX2V2ZW50cyI6e30sIl9ldmVudHNDb3VudCI6MCwiX21heExpc3RlbmVycyI6MH19LCJpc05ldyI6ZmFsc2UsIl9kb2MiOnsiX192IjowLCJfaWQiOiI1ODFiMzVkMzVhOTBkZTExMmQ1ODMwMDciLCJwYXNzd29yZCI6IiQyYSQxMCRMN3VNajRZZG9vcC5nYzRQWjR1bEVPUzIwY004eWVEUzcvc1dpR3puNEdpbjVUbENzUTBRaSIsInVzZXJuYW1lIjoiYmJiIiwiYWNjb3VudHR5cGUiOiJiYmIiLCJibG9vZHR5cGUiOiJiIiwiYWRkcmVzcyI6ImJiYiIsImVtYWlsIjoiYmJiQGJiYi5jbCIsIm5hbWUiOiJiYmIifSwiX3ByZXMiOnsiJF9fb3JpZ2luYWxfc2F2ZSI6W251bGwsbnVsbF0sIiRfX29yaWdpbmFsX3ZhbGlkYXRlIjpbbnVsbF0sIiRfX29yaWdpbmFsX3JlbW92ZSI6W251bGxdfSwiX3Bvc3RzIjp7IiRfX29yaWdpbmFsX3NhdmUiOltdLCIkX19vcmlnaW5hbF92YWxpZGF0ZSI6W10sIiRfX29yaWdpbmFsX3JlbW92ZSI6W119LCJpYXQiOjE0Nzg5NzU1MDMsImV4cCI6MTQ3OTA2MTkwM30.7Jqe_UswQvx_PZaO8Uz7n5beZHXvyaTqb5RIOPy5jGQ"
   try {
-    req.decoded = jwt.verify(req.cookies["access-token"], process.env.JWT_SECRET);
+    // req.decoded = jwt.verify(req.cookies["access-token"], process.env.JWT_SECRET);
+    req.decoded = jwt.verify(req.cookies["access-token"], "eduardoschatsuperawesomesecretjwtkey");
     next();
   } catch(err) {
     res.redirect(302, '/users/login');
@@ -55,6 +58,14 @@ router.get('/data/arquicoins', function(req, res){
     else { res.json(result);  }
   }
   Arquicoins.getArquicoins(req.decoded._doc.username, callback)
+});
+
+router.post('/data/arquicoins/buy', function(req, res){
+  function callback(err, result) {
+    if (err) { res.json(err); }
+    else { res.json(result);  }
+  }
+  Arquicoins.buyArquicoins(req.body.amount, callback);
 });
 
 // ============================Arquitran TRX====================================

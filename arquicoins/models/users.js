@@ -10,6 +10,7 @@ function connect(callback) {
         var UserModel = models.loadSchema('users', {
             fields:{
                 users_id    : "text",
+                users_username  : "text",
                 users_arquicoins : "int",
                 users_updated_at     : "timestamp",
                 users_account_type: "text",
@@ -29,6 +30,3 @@ function connect(callback) {
 module.exports = {
     connect: connect
 };
-
-
-

@@ -32,13 +32,28 @@ $(document).ready(function() {
     $('#buyForm').submit(function(event) {
         var amount = $('#Amount_to_buy').val();
 
-        if (amount === '123') {
-            alert('123 transferido');
-            return;
-        } else {
-            alert('Monto rechazado');
-            event.preventDefault();
-        }
+        $.ajax({
+          type: "POST",
+          url: '/data/arquicoins/buy',
+          data: amount,
+          sucess: function(data, status, jqXHR){
+            if (amount === '123') {
+                alert('123 transferido');
+                return;
+            } else {
+                alert('Monto rechazado');
+                event.preventDefault();
+            }
+          }
+        });
+        //
+        // if (amount === '123') {
+        //     alert('123 transferido');
+        //     return;
+        // } else {
+        //     alert('Monto rechazado');
+        //     event.preventDefault();
+        // }
     });
 
     //==========================================================================

@@ -25,6 +25,14 @@ function connect(callback) {
         });
     });
 }
+
+function save(hash, callback){
+  var models = serviceCassandra.createClient();
+  var txs = new models.instance.purchase_transactions(hash);
+
+  txs.save(callback);
+}
+
 module.exports = {
     connect: connect
 };
