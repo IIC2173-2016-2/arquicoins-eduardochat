@@ -12,7 +12,7 @@ function getArquicoins(username, callback) {
         // error, amount
         const Long = require('cassandra-driver').types.Long;
 
-        Users.findOne({users_id: "10"}, function(err, user){
+        Users.findOne({users_id: username}, function(err, user){
             callback(null, {'amount': user.users_arquicoins });
         });
     });
