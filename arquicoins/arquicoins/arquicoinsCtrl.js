@@ -1,19 +1,18 @@
 var config = require('../../config.js');
 var request = require('superagent');
 
-function getArquicoins(username, callback) {
-    callback(null, {'amount': 123}); // error, amount
-}
+var User = require('../models/users');
 
-/*
-var url = config.transactions_url + id + '?application_token=' + config.app_token;
-request
-  .get(url)
-  .end(function(err, res){
-    callback(err, res);
-  })
-;
-*/
+function getArquicoins(username, callback) {
+    User.connect(function(Users) {
+        // error, amount
+        const Long = require('cassandra-driver').types.Long;
+
+        Users.findOne({users_id: "10"}, function(err, user){
+            callback(null, {'amount': user.users_arquicoins });
+        });
+    });
+}
 
 module.exports = {
     getArquicoins: getArquicoins

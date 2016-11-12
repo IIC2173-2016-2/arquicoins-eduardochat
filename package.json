@@ -12,6 +12,7 @@
     "body-parser": "^1.15.2",
     "cassandra-driver": "^3.1.5",
     "express": "^4.14.0",
+    "express-cassandra": "^1.4.2",
     "morgan": "^1.7.0",
     "superagent": "^2.3.0"
   }
