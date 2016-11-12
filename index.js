@@ -5,11 +5,13 @@
 // =============================================================================
 
 // Call the packages we need
-var express    = require('express');      // call express
-var app        = express();               // define our app using express
-var bodyParser = require('body-parser');  // used to retrieve post params
-var morgan     = require('morgan');       // used to log received requests
-var path = __dirname + '/public/';
+var express       = require('express');      // call express
+var app           = express();               // define our app using express
+var bodyParser    = require('body-parser');  // used to retrieve post params
+var morgan        = require('morgan');       // used to log received requests
+var jwt           = require('jsonwebtoken'); // JsonWebToken for session validation
+var cookieParser  = require('cookie-parser');// simple cookie parser for Express
+var path          = __dirname + '/public/';  // public path
 
 // To pass original headers through NGINX
 app.set('trust proxy', 'loopback');
@@ -18,6 +20,9 @@ app.set('trust proxy', 'loopback');
 // this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+// Use cookieParser
+app.use(cookieParser());
 
 // use Morgan to log requests to the console
 app.use(morgan('dev')); // 'dev' for development / 'short' for production
@@ -32,15 +37,24 @@ var router = express.Router(); // get an instance of the express Router
 
 // =============================Login User Data=================================
 
+app.use(function (req, res, next) {
+  try {
+    req.decoded = jwt.verify(req.cookies["access-token"], process.env.JWT_SECRET);
+    next();
+  } catch(err) {
+    res.redirect(302, '/users/login');
+  }
+})
+
 // ==========================Arquicoins Cassandra===============================
 var Arquicoins = require('./arquicoins/arquicoins/arquicoinsCtrl.js');
 
-router.get('/data/arquicoins/:username', function(req, res){
+router.get('/data/arquicoins', function(req, res){
   function callback(err, result) {
     if (err) { res.json(err); }
     else { res.json(result);  }
   }
-  Arquicoins.getArquicoins(req.params.username, callback)
+  Arquicoins.getArquicoins(req.decoded._doc.username, callback)
 });
 
 // ============================Arquitran TRX====================================

@@ -2,11 +2,9 @@ var url = window.location.href
 var arr = url.split("/");
 var server_url = arr[0] + "//" + arr[2] + "/arquicoins/";
 
-var username = 'pepe';
-
 $(document).ready(function() {
     //==========================Load Data=======================================
-    $.get(server_url + 'data/arquicoins/' + username, function(data, status) {
+    $.get(server_url + 'data/arquicoins/', function(data, status) {
       if(status==='success'){
         $('#ArquicoinsFunds').text(data.amount);
       } else {
