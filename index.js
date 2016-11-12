@@ -54,7 +54,10 @@ var Arquicoins = require('./arquicoins/arquicoins/arquicoinsCtrl.js');
 
 router.get('/data/arquicoins', function(req, res){
   function callback(err, result) {
-    if (err) { res.json(err); }
+    if (err) {
+        res.status(400);
+        res.json(err);
+    }
     else { res.json(result);  }
   }
   Arquicoins.getArquicoins(req.decoded._doc.username, callback)

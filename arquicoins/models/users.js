@@ -17,7 +17,8 @@ function connect(callback) {
                 users_credit_number: "int",
                 users_csv_number: "int"
             },
-            key:["users_id"]
+            key:["users_id"],
+            indexes: ["users_username"]
         }, function(err){
             //the table in cassandra is now created
             //the models.instance.Person or UserModel can now be used to do operations

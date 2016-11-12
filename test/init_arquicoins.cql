@@ -2,8 +2,12 @@ CREATE KEYSPACE arquicoins WITH replication = {'class':'SimpleStrategy', 'replic
 
 CREATE TABLE arquicoins.users (
     users_id text PRIMARY KEY,
+    users_user_name text,
     users_arquicoins int,
     users_updated_at timestamp
+    users_account_type text,
+    users_credit_number int,
+    users_csv_number int
 );
 
 CREATE TABLE arquicoins.purchase_transactions (

@@ -27,13 +27,13 @@ function getArquicoins(username, callback) {
     // callback(null, {'amount': 10 });
 }
 
-function buyArquicoins(amount, callback){
+function buyArquicoins(username, amount, callback){
 
   User.connect(function(Users) {
       // error, amount
       const Long = require('cassandra-driver').types.Long;
 
-      Users.findOne({users_id: "1231"}, function(err, user){
+      Users.findOne({users_username: username}, function(err, user){
 
         // Ocupar alquitranCtrl para realizar compra
         var hash = {  purchase_transactions_id: 1,

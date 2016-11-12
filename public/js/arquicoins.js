@@ -10,6 +10,8 @@ $(document).ready(function() {
       } else {
         $('#ArquicoinsFunds').text('Error');
       }
+    }).fail(function() {
+        $('#ArquicoinsFunds').text('Error');
     });
 
     //==========================Transfer========================================
