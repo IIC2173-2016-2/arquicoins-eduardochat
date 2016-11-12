@@ -39,7 +39,9 @@ var router = express.Router(); // get an instance of the express Router
 
 app.use(function (req, res, next) {
   try {
-    req.decoded = jwt.verify(req.cookies["access-token"], process.env.JWT_SECRET);
+    var jwt_token = req.cookies["access-token"];
+    var jwt_token = jwt_token || req.headers["access-token"];
+    req.decoded = jwt.verify(jwt_token, process.env.JWT_SECRET);
     next();
   } catch(err) {
     res.redirect(302, '/users/login');
