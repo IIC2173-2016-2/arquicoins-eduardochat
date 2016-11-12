@@ -15,11 +15,11 @@ function getArquicoins(username, callback) {
         Users.findOne({users_id: username}, function(err, user){
             if(err) {
                 callback(err, {'amount': 0 });
-            }
-            if(user) {
+            } else if(user) {
                 callback(null, {'amount': user.users_arquicoins });
+            } else {
+              callback(null, {'amount': 0 });
             }
-            callback(null, {'amount': 0 });
         });
     });
     // callback(null, {'amount': 10 });
