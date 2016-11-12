@@ -44,6 +44,7 @@ app.use(function (req, res, next) {
     req.decoded = jwt.verify(jwt_token, process.env.JWT_SECRET);
     next();
   } catch(err) {
+    console.log(req.headers);
     res.redirect(302, '/users/login');
   }
 })
