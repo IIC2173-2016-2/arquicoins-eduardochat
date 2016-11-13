@@ -1,5 +1,6 @@
 var User = require('../models/users');
 var PurchaseTransaction = require('../models/purchase_transactions');
+var GiftTransaction = require('../models/gift_transactions');
 
 function getArquicoins(username, callback) {
 
@@ -41,6 +42,7 @@ function buyArquicoins(username, amount, callback) {
                             callback(saveErr, {'amount': 0});
                         } else {
                             user.users_arquicoins = user.users_arquicoins + parseInt(amount);
+                            user.users_updated_at = Date.now();
                             user.save(function (userSaveErr) {
                                 if (userSaveErr) {
                                     callback(userSaveErr, {'amount': 0});
@@ -60,7 +62,67 @@ function buyArquicoins(username, amount, callback) {
 
 }
 
+function transferArquicoins(username, toUsername, amount, callback) {
+    const transAmount = parseInt(amount);
+    User.connect(function (Users) {
+
+        Users.findOne({users_username: toUsername}, function (err, toUser) {
+            if(!toUser) {
+                callback('No existe usuario objetivo', {});
+            } else {
+                Users.findOne({users_username: username}, function(err, user){
+                    if(!user) {
+                        callback('No existe usuario actual', {});
+                    } else if (user.users_arquicoins < transAmount) {
+                        callback('Usuario activo no tiene suficientes fondos.', {});
+                    } else {
+                        GiftTransaction.connect(function (GiftTransactions, models) {
+
+                            var trxData = {
+                                gift_transactions_uid: models.uuid(),
+                                gift_transactions_origin_user_id: user.users_id,
+                                gift_transactions_end_user_id: toUser.users_id,
+                                gift_transactions_amount: transAmount,
+                                gift_transactions_created_at: Date.now()
+                            };
+
+                            var trx = new GiftTransactions(trxData);
+                            trx.save(function (saveErr) {
+                                if (saveErr) {
+                                    callback(saveErr, {});
+                                } else {
+                                    toUser.users_arquicoins = toUser.users_arquicoins + transAmount;
+                                    toUser.users_updated_at = Date.now();
+                                    toUser.save(function (toUserSaveErr) {
+                                        if (toUserSaveErr) {
+                                            callback(toUserSaveErr, {});
+                                        } else {
+                                            user.users_arquicoins = user.users_arquicoins - transAmount;
+                                            user.users_updated_at = Date.now();
+                                            user.save(function (userSaveErr) {
+                                                if (userSaveErr) {
+                                                    callback(userSaveErr, {});
+                                                } else {
+                                                    callback(null, {'amount': user.users_arquicoins});
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    }
+                })
+            }
+
+
+        });
+    });
+
+}
+
 module.exports = {
     getArquicoins: getArquicoins,
-    buyArquicoins: buyArquicoins
+    buyArquicoins: buyArquicoins,
+    transferArquicoins: transferArquicoins
 };

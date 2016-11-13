@@ -1,4 +1,4 @@
-var url = window.location.href
+var url = window.location.href;
 var arr = url.split("/");
 var server_url = arr[0] + "//" + arr[2] + "/arquicoins/";
 
@@ -27,16 +27,27 @@ $(document).ready(function () {
     //==========================Transfer========================================
 
     $('#transferForm').submit(function (event) {
-        var username = $('#Transfer').val();
+        var toUsername = $('#Transfer').val();
         var amount = $('#Amount').val();
 
-        if (username === 'existe') {
-            alert('Transferencia exitosa');
-            return;
-        } else {
-            alert('El usuario no existe');
-            event.preventDefault();
-        }
+        $.ajax({
+            type: "POST",
+            url: server_url + 'data/arquicoins/transfer',
+            data: {
+                toUsername: toUsername,
+                amount: amount
+            },
+            success: function (data, status, jqXHR) {
+                if (status === 'success') {
+                    $('#ArquicoinsFunds').text(data.amount);
+                    $('#Amount_to_buy').val(0);
+                }
+            },
+            error: function (jqXHR, status, errorThrown) {
+                alert(jqXHR.statusText + ': ' + jqXHR.responseText);
+            }
+        });
+        event.preventDefault();
     });
 
     //==========================PaymentInfo========================================
@@ -49,7 +60,7 @@ $(document).ready(function () {
         if(accountType && creditNumber && csvNumber) {
             $.ajax({
                 type: "PATCH",
-                url: 'data/paymentinfo',
+                url: server_url + 'data/paymentinfo',
                 data: {
                     accountType: accountType,
                     creditNumber: creditNumber,
@@ -83,7 +94,7 @@ $(document).ready(function () {
 
         $.ajax({
             type: "POST",
-            url: 'data/arquicoins/buy',
+            url: server_url + 'data/arquicoins/buy',
             data: {
                 amount: amount
             },

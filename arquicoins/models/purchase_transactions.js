@@ -16,7 +16,7 @@ function connect(callback) {
             },
             key:["purchase_transactions_id"]
         }, function(err){
-            callback(PurchaseModel);
+            callback(PurchaseModel, models);
         });
     });
 }

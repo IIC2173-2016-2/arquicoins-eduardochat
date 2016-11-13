@@ -77,6 +77,17 @@ router.post('/data/arquicoins/buy', function(req, res){
   Arquicoins.buyArquicoins(req.decoded._doc.username, req.body.amount, callback);
 });
 
+router.post('/data/arquicoins/transfer', function(req, res){
+    function callback(err, result) {
+        if (err) {
+            res.status(400);
+            res.json(err);
+        }
+        else { res.json(result);  }
+    }
+    Arquicoins.transferArquicoins(req.decoded._doc.username, req.body.toUsername, req.body.amount, callback);
+});
+
 router.get('/data/paymentinfo', function(req, res){
     function callback(err, result) {
         if (err) {

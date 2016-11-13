@@ -20,7 +20,7 @@ function connect(callback) {
             key:["users_id"],
             indexes: ["users_username"]
         }, function(err){
-            callback(UserModel);
+            callback(UserModel, models);
         });
     });
 }
