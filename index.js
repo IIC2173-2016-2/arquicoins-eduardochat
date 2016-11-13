@@ -53,6 +53,7 @@ app.use(function (req, res, next) {
 
 // ==========================Arquicoins Cassandra===============================
 var Arquicoins = require('./arquicoins/arquicoins/arquicoinsCtrl.js');
+var Users = require('./arquicoins/arquicoins/usersCtrl.js');
 
 router.get('/data/arquicoins', function(req, res){
   function callback(err, result) {
@@ -67,10 +68,41 @@ router.get('/data/arquicoins', function(req, res){
 
 router.post('/data/arquicoins/buy', function(req, res){
   function callback(err, result) {
-    if (err) { res.json(err); }
+    if (err) {
+        res.status(400);
+        res.json(err);
+    }
     else { res.json(result);  }
   }
   Arquicoins.buyArquicoins(req.decoded._doc.username, req.body.amount, callback);
+});
+
+router.get('/data/paymentinfo', function(req, res){
+    function callback(err, result) {
+        if (err) {
+            res.status(400);
+            res.json(err);
+        }
+        else { res.json(result);  }
+    }
+    Users.getPaymentInfo(req.decoded._doc.username, callback)
+});
+
+router.patch('/data/paymentinfo', function(req, res){
+    function callback(err, result) {
+        if (err) {
+            res.status(400);
+            res.json(err);
+        }
+        else { res.json(result);  }
+    }
+
+    var paymentInfo = {
+        accountType: req.body.accountType,
+        creditNumber: req.body.creditNumber,
+        csvNumber: req.body.csvNumber
+    };
+    Users.updatePaymentInfo(req.decoded._doc.username, paymentInfo, callback)
 });
 
 // ============================Arquitran TRX====================================

@@ -135,22 +135,75 @@
               </section>
           </div>
           <div class="col-md-12">
-              <section class="panel">
-                <header class="panel-heading">
-                    Comprar
-                </header>
-                <div class="panel-body">
-                    <form id="buyForm" class="form-inline" role="form">
-                        <div class="form-group">
-                            <label class="sr-only" for="Amount_to_buy">Cantidad</label>
-                            <input type="number" class="form-control" id="Amount_to_buy" placeholder="Cantidad" name="amount">
-                        </div>
+              <div class="row">
+                  <div class="col-md-6">
+                      <section class="panel">
+                          <header class="panel-heading">
+                              Datos de Pago
+                          </header>
+                          <div class="panel-body">
+                              <form id="paymentInfoForm"  role="form">
+                                  <div class="row">
+                                      <div class="col-md-10">
+                                          <div class="row">
+                                              <div class="col-md-4">
+                                                  <div class="form-group">
+                                                      <label class="sr-only" for="account_type">Tipo de Cuenta</label>
+                                                      <input type="text" class="form-control" id="account_type" placeholder="Cuenta corriente, vista, etc." name="account_type">
+                                                  </div>
+                                              </div>
 
-                        <button type="submit" class="btn btn-success">Comprar</button>
-                    </form>
+                                              <div class="col-md-4">
+                                                  <div class="form-group">
+                                                      <label class="sr-only" for="credit_number">Número de Tarjeta</label>
+                                                      <input type="text" class="form-control" id="credit_number" placeholder="XXXX-XXXX-XXXX-XXXX" name="credit_number">
+                                                  </div>
+                                              </div>
 
-                </div>
-              </section>
+                                              <div class="col-md-4">
+                                                  <div class="form-group">
+                                                      <label class="sr-only" for="csv_number">Csv</label>
+                                                      <input type="number" class="form-control" id="csv_number" placeholder="Credit secret number" name="csv_number">
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-2">
+                                          <button type="submit" class="btn btn-success">Guardar</button>
+                                      </div>
+                                  </div>
+
+                              </form>
+
+                          </div>
+                      </section>
+                  </div>
+                  <div class="col-md-6">
+                      <section class="panel">
+                          <header class="panel-heading">
+                              Comprar
+                          </header>
+                          <div class="panel-body">
+                              <form id="buyForm" role="form">
+                                  <div class="row">
+                                      <div class="col-md-4">
+                                          <div class="form-group">
+                                              <label class="sr-only" for="Amount_to_buy">Cantidad</label>
+                                              <input type="number" class="form-control" id="Amount_to_buy" placeholder="Cantidad" name="amount">
+                                          </div>
+                                      </div>
+                                      <div class="col-md-2">
+                                          <button type="submit" class="btn btn-success">Comprar</button>
+                                      </div>
+                                  </div>
+
+                              </form>
+
+                          </div>
+                      </section>
+                  </div>
+              </div>
+
           </div>
         </div>
         </section>

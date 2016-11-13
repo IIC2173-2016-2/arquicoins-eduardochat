@@ -14,7 +14,7 @@ function connect(callback) {
                 users_arquicoins : "int",
                 users_updated_at     : "timestamp",
                 users_account_type: "text",
-                users_credit_number: "int",
+                users_credit_number: "text",
                 users_csv_number: "int"
             },
             key:["users_id"],
