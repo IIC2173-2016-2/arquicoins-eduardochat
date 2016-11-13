@@ -17,7 +17,7 @@ function init(card_number, card_cvv, first_name, last_name, currency, amount, ca
             "currency": currency,
             "amount": amount
         }
-    }
+    };
     request
       .post(url)
       .send(data)

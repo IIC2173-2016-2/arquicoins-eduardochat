@@ -36,26 +36,17 @@ $(document).ready(function() {
 
         $.ajax({
           type: "POST",
-          url: '/data/arquicoins/buy',
-          data: amount,
-          sucess: function(data, status, jqXHR){
-            if (amount === '123') {
-                alert('123 transferido');
-                return;
-            } else {
-                alert('Monto rechazado');
-                event.preventDefault();
-            }
+          url: 'data/arquicoins/buy',
+          data: {
+              amount: amount
+          },
+          success: function(data, status, jqXHR){
+              if(status==='success'){
+                  $('#ArquicoinsFunds').text(data.amount);
+              }
           }
         });
-        //
-        // if (amount === '123') {
-        //     alert('123 transferido');
-        //     return;
-        // } else {
-        //     alert('Monto rechazado');
-        //     event.preventDefault();
-        // }
+        event.preventDefault();
     });
 
     //==========================================================================

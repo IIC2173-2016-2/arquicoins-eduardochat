@@ -1,5 +1,5 @@
 const cassandra = require('express-cassandra');
-var serviceCassandra = require('../services/cassandra');
+const serviceCassandra = require('../services/cassandra');
 
 function connect(callback) {
     var models = serviceCassandra.createClient();
@@ -17,10 +17,6 @@ function connect(callback) {
             },
             key:["gift_transactions_id"]
         }, function(err){
-            //the table in cassandra is now created
-            //the models.instance.Person or UserModel can now be used to do operations
-            // console.log(models.instance.Users);
-            // console.log(models.instance.Users === UserModel);
             callback(GiftModel);
         });
     });
