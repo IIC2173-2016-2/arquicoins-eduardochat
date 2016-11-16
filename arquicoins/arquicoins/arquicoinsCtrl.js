@@ -1,6 +1,7 @@
 var User = require('../models/users');
 var PurchaseTransaction = require('../models/purchase_transactions');
 var GiftTransaction = require('../models/gift_transactions');
+var Arquitran = require('../arquitran/arquitranCtrl');
 
 function getArquicoins(username, callback) {
 
@@ -18,8 +19,8 @@ function getArquicoins(username, callback) {
     });
 }
 
-function buyArquicoins(username, amount, callback) {
-
+function buyArquicoins(username, firstname, lastname, amount, callback) {
+    const buyAmount = parseInt(amount);
     User.connect(function (Users) {
 
         Users.findOne({users_username: username}, function (err, user) {
@@ -27,32 +28,42 @@ function buyArquicoins(username, amount, callback) {
             if(user.users_credit_number && user.users_csv_number) {
                 //TODO Asegurar parse de amount
                 // Ocupar alquitranCtrl para realizar compra
-                var hash = {
-                    purchase_transactions_id: "myserver",
-                    purchase_transactions_user_id: user.users_id,
-                    purchase_transactions_amount: parseInt(amount),
-                    purchase_transactions_created_at: Date.now()
-                };
+                Arquitran.init(user.users_credit_number, user.users_csv_number, firstname, lastname, 'CLP', buyAmount, function(arquitranError, result){
+                    if(arquitranError) {
+                        callback(arquitranError, {});
+                    } else {
+                        const trxId = result.header.location.replace('/transactions/', '').replace('/', '');
+                        var hash = {
+                            purchase_transactions_id: trxId,
+                            purchase_transactions_user_id: user.users_id,
+                            purchase_transactions_amount: buyAmount,
+                            purchase_transactions_created_at: Date.now()
+                        };
 
 
-                PurchaseTransaction.connect(function (PurchaseTransactions) {
-                    var trx = new PurchaseTransactions(hash);
-                    trx.save(function (saveErr) {
-                        if (saveErr) {
-                            callback(saveErr, {'amount': 0});
-                        } else {
-                            user.users_arquicoins = user.users_arquicoins + parseInt(amount);
-                            user.users_updated_at = Date.now();
-                            user.save(function (userSaveErr) {
-                                if (userSaveErr) {
-                                    callback(userSaveErr, {'amount': 0});
+                        PurchaseTransaction.connect(function (PurchaseTransactions) {
+                            var trx = new PurchaseTransactions(hash);
+                            trx.save(function (saveErr) {
+                                if (saveErr) {
+                                    callback(saveErr, {'amount': 0});
                                 } else {
-                                    callback(null, {'amount': user.users_arquicoins});
+                                    user.users_arquicoins = user.users_arquicoins + buyAmount;
+                                    user.users_updated_at = Date.now();
+                                    user.save(function (userSaveErr) {
+                                        if (userSaveErr) {
+                                            callback(userSaveErr, {'amount': 0});
+                                        } else {
+                                            callback(null, {'amount': user.users_arquicoins});
+                                        }
+                                    });
                                 }
                             });
-                        }
-                    });
+                        });
+                    }
+
                 });
+
+
             } else {
                 callback('Falta información de pago', {});
             }
