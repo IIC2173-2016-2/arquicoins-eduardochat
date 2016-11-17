@@ -30,6 +30,8 @@ $(document).ready(function () {
         var toUsername = $('#Transfer').val();
         var amount = $('#Amount').val();
 
+        const form_btn = $('#transferForm input[type="submit"]').prop('disabled', true);
+
         $.ajax({
             type: "POST",
             url: server_url + 'data/arquicoins/transfer',
@@ -45,6 +47,9 @@ $(document).ready(function () {
             },
             error: function (jqXHR, status, errorThrown) {
                 alert(jqXHR.statusText + ': ' + jqXHR.responseText);
+            },
+            complete: function(jqXHR, textStatus) {
+                form_btn.prop('disabled', false);
             }
         });
         event.preventDefault();
@@ -58,6 +63,9 @@ $(document).ready(function () {
         var csvNumber = $('#csv_number').val();
 
         if(accountType && creditNumber && csvNumber) {
+
+            const form_btn = $('#paymentInfoForm input[type="submit"]').prop('disabled', true);
+
             $.ajax({
                 type: "PATCH",
                 url: server_url + 'data/paymentinfo',
@@ -77,10 +85,13 @@ $(document).ready(function () {
                     } else {
                         alert('No se pudo actualizar la información de pago');
                     }
+                },
+                complete: function(jqXHR, textStatus) {
+                    form_btn.prop('disabled', false);
                 }
             });
         } else {
-            alert('Falta información de pago por rellenar.');
+            alert('Falta información de pago por rellenar');
         }
 
         event.preventDefault();
@@ -91,6 +102,8 @@ $(document).ready(function () {
 
     $('#buyForm').submit(function (event) {
         var amount = $('#Amount_to_buy').val();
+
+        const form_btn = $('#buyForm input[type="submit"]').prop('disabled', true);
 
         $.ajax({
             type: "POST",
@@ -106,6 +119,9 @@ $(document).ready(function () {
             },
             error: function (jqXHR, status, errorThrown) {
                 alert(jqXHR.statusText + ': ' + jqXHR.responseText);
+            },
+            complete: function(jqXHR, textStatus) {
+                form_btn.prop('disabled', false);
             }
         });
         event.preventDefault();
