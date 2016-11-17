@@ -45,7 +45,7 @@ function buyArquicoins(username, firstname, lastname, amount, callback) {
                             var trx = new PurchaseTransactions(hash);
                             trx.save(function (saveErr) {
                                 if (saveErr) {
-                                    callback(saveErr, {'amount': 0});
+                                    callback(saveErr, {'amount': user.users_arquicoins});
                                 } else {
                                     user.users_arquicoins = user.users_arquicoins + buyAmount;
                                     user.users_updated_at = Date.now();

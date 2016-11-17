@@ -115,60 +115,8 @@ router.patch('/data/paymentinfo', function(req, res){
     Users.updatePaymentInfo(req.decoded._doc.username, paymentInfo, callback)
 });
 
-// ============================Arquitran TRX====================================
-var Arquitran = require('./arquicoins/arquitran/arquitranCtrl');
-
-router.get('/trx/:trxId', function(req, res) {
-  function callback(err, result) {
-    if (err) { res.json(err); }
-    else { res.json(result);  }
-  }
-  Arquitran.state(req.params.trxId, callback)
-});
-router.post('/trx', function(req, res) {
-  function callback(err, result) {
-    if (err) { res.json(err); }
-    else {
-      var status = result.status;
-      var trx_id = result.header.location.replace('/transactions/', '').replace('/', '');
-
-      // TODO --> Store transaction details !!
-
-      res.json(result);
-    }
-  }
-  Arquitran.init(req.body.card_number, req.body.card_cvv, req.body.first_name, req.body.last_name, req.body.currency, req.body.amount, callback)
-});
-
 // =========================Public Folder=======================================
 app.use('/arquicoins', express.static('public'));
-
-// =============================================================================
-// ROUTES FOR samples
-// =============================================================================
-var currentId = 'c8c1e4c2-fc9f-4898-8117-99af9062fd61';
-router.route('/test/init')
-  .get(function(req, res) {
-    function callback(err, result) {
-      if (err) {
-          res.json(err);
-      } else {
-          currentId = result.header.location.replace('/transactions/', '').replace('/', '');
-          res.json(result);
-      }
-    }
-    Arquitran.init('9a4576d3-83a7-4d58-a4d2-f32f201f6e34', 123, 'Pedro', 'Saratscheff', 'CLP', 1, callback)
-  })
-;
-router.route('/test/state')
-  .get(function(req, res) {
-    function callback(err, result) {
-      if (err) { res.json(err); }
-      else { res.json(result);  }
-    }
-    Arquitran.state(currentId, callback)
-  })
-;
 
 // =============================================================================
 // Register Routes
